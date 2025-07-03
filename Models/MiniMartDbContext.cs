@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace DEMO_SWD392.Models;
 
@@ -18,6 +16,10 @@ public partial class MiniMartDbContext : DbContext
     }
 
     public virtual DbSet<BackupLog> BackupLogs { get; set; }
+
+    public virtual DbSet<Cart> Carts { get; set; }
+
+    public virtual DbSet<CartItem> CartItems { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -36,19 +38,14 @@ public partial class MiniMartDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var builder = new ConfigurationBuilder()
-                       .SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        IConfigurationRoot configuration = builder.Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("server = LAPTOP-KMHGGFJ6\\MAY1; database = MiniMartDB;uid=sa;pwd=sa;TrustServerCertificate=True;");
 
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BackupLog>(entity =>
         {
-            entity.HasKey(e => e.BackupId).HasName("PK__BackupLo__921BBF0AA1D89851");
+            entity.HasKey(e => e.BackupId).HasName("PK__BackupLo__921BBF0A21516B54");
 
             entity.ToTable("BackupLog");
 
@@ -69,9 +66,52 @@ public partial class MiniMartDbContext : DbContext
                 .HasConstraintName("FK__BackupLog__userI__4D94879B");
         });
 
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B8A8CCF9E2");
+
+            entity.ToTable("Cart");
+
+            entity.Property(e => e.CartId).HasColumnName("cartId");
+            entity.Property(e => e.CreatedDate)
+                .HasColumnType("datetime")
+                .HasColumnName("createdDate");
+            entity.Property(e => e.Status)
+                .HasMaxLength(50)
+                .HasColumnName("status");
+            entity.Property(e => e.UserId).HasColumnName("userId");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK__Cart__userId__5070F446");
+        });
+
+        modelBuilder.Entity<CartItem>(entity =>
+        {
+            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B64804F5E7");
+
+            entity.ToTable("CartItem");
+
+            entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
+            entity.Property(e => e.CartId).HasColumnName("cartId");
+            entity.Property(e => e.ProductId).HasColumnName("productId");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+            entity.Property(e => e.UnitPrice)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("unitPrice");
+
+            entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.CartId)
+                .HasConstraintName("FK__CartItem__cartId__534D60F1");
+
+            entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK__CartItem__produc__5441852A");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D829B02095");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__23CAF1D8E17F9C85");
 
             entity.ToTable("Category");
 
@@ -86,7 +126,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<DiscountCode>(entity =>
         {
-            entity.HasKey(e => e.DiscountCode1).HasName("PK__Discount__3D87979B7BF28123");
+            entity.HasKey(e => e.DiscountCode1).HasName("PK__Discount__3D87979B60189087");
 
             entity.ToTable("DiscountCode");
 
@@ -104,7 +144,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<Invoice>(entity =>
         {
-            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoice__1252416C16492562");
+            entity.HasKey(e => e.InvoiceId).HasName("PK__Invoice__1252416C5590EC3D");
 
             entity.ToTable("Invoice");
 
@@ -129,7 +169,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<InvoiceDetail>(entity =>
         {
-            entity.HasKey(e => e.InvoiceDetailId).HasName("PK__InvoiceD__3759D6FEF65EFD07");
+            entity.HasKey(e => e.InvoiceDetailId).HasName("PK__InvoiceD__3759D6FE8213DDFB");
 
             entity.ToTable("InvoiceDetail");
 
@@ -152,7 +192,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16AA60DE656");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__2D10D16A94B1C36F");
 
             entity.ToTable("Product");
 
@@ -176,7 +216,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<Report>(entity =>
         {
-            entity.HasKey(e => e.ReportId).HasName("PK__Report__1C9B4E2DC121C9BF");
+            entity.HasKey(e => e.ReportId).HasName("PK__Report__1C9B4E2DD0471962");
 
             entity.ToTable("Report");
 
@@ -198,7 +238,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98462A7C021B08");
+            entity.HasKey(e => e.RoleId).HasName("PK__Role__CD98462A946418AD");
 
             entity.ToTable("Role");
 
@@ -210,7 +250,7 @@ public partial class MiniMartDbContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFF7E2A4130");
+            entity.HasKey(e => e.UserId).HasName("PK__Users__CB9A1CFF85676207");
 
             entity.Property(e => e.UserId).HasColumnName("userId");
             entity.Property(e => e.AccountFullName)

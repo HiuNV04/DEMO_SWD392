@@ -17,6 +17,8 @@ public partial class User
 
     public virtual ICollection<BackupLog> BackupLogs { get; set; } = new List<BackupLog>();
 
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
+
     public virtual ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
 
     public virtual ICollection<Report> Reports { get; set; } = new List<Report>();
