@@ -56,7 +56,7 @@ namespace DEMO_SWD392
             var selectedProduct = (button.DataContext as dynamic);
             int productId = selectedProduct.ProductId;
 
-            var detailWindow = new ViewDetailWindow( productId);
+            var detailWindow = new ViewDetailWindow(productId);
             detailWindow.ShowDialog();
 
             // Nếu có thay đổi, load lại data
@@ -130,9 +130,45 @@ namespace DEMO_SWD392
 
         private void ManageAccount_Click(object sender, RoutedEventArgs e)
         {
+<<<<<<< HEAD
             ManageAccount manageAccountWindow = new ManageAccount();
             manageAccountWindow.Show();
             this.Close();
+=======
+            try
+            {
+                dgProduct.Visibility = Visibility.Collapsed;
+
+                var users = _context.Users
+                    .Include(u => u.Role)
+                    .Select(u => new
+                    {
+                        u.UserId,
+                        u.Username,
+                        u.AccountFullName,
+                        Role = u.Role != null ? u.Role.RoleName : "Unknown",
+                        Status = "Active"
+                    })
+                    .ToList();
+
+                if (users.Count == 0)
+                {
+                    MessageBox.Show("No user accounts found.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                dgAccountList.ItemsSource = users;
+                dgAccountList.Visibility = Visibility.Visible;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to load user list. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void ManageAccount_Click(object sender, RoutedEventArgs e)
+        {
+            ManageAccount manageAccountWindow = new ManageAccount();
+            manageAccountWindow.Show();
+>>>>>>> f0427ac1ea47cd848cb9699babf4fb424a5f3698
         }
     }
 }
