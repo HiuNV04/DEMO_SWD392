@@ -95,5 +95,11 @@ namespace DEMO_SWD392
                 LoadProducts(); // Hàm này đã có, dùng để reload lại danh sách
             }
         }
+
+        private void ManageAccount_Click(object sender, RoutedEventArgs e)
+        {
+            ManageAccount manageAccountWindow = new ManageAccount();
+            manageAccountWindow.Show();
+        }
     }
 }
