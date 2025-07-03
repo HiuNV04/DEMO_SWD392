@@ -56,7 +56,7 @@ namespace DEMO_SWD392
             var selectedProduct = (button.DataContext as dynamic);
             int productId = selectedProduct.ProductId;
 
-            var detailWindow = new ViewDetailWindow( productId);
+            var detailWindow = new ViewDetailWindow(productId);
             detailWindow.ShowDialog();
 
             // Nếu có thay đổi, load lại data
@@ -142,7 +142,7 @@ namespace DEMO_SWD392
                         u.Username,
                         u.AccountFullName,
                         Role = u.Role != null ? u.Role.RoleName : "Unknown",
-                        Status = "Active" 
+                        Status = "Active"
                     })
                     .ToList();
 
@@ -158,6 +158,11 @@ namespace DEMO_SWD392
             {
                 MessageBox.Show("Unable to load user list. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+        private void ManageAccount_Click(object sender, RoutedEventArgs e)
+        {
+            ManageAccount manageAccountWindow = new ManageAccount();
+            manageAccountWindow.Show();
         }
     }
 }
