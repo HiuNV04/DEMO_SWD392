@@ -7,6 +7,59 @@
         mc:Ignorable="d"
         Title="Cashier" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <!-- Sidebar width -->
+            <ColumnDefinition Width="*"/>
+            <!-- Main content -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <StackPanel Grid.Column="0" Background="#2c3e50" VerticalAlignment="Stretch">
+            <TextBlock Text="Cashier Home" 
+                      Foreground="White" 
+                      FontSize="20" 
+                      FontWeight="Bold"
+                      Margin="16,20,0,32"/>
+            <Button Content="View Product"
+                   Margin="16,0,16,12"
+                   Height="40"
+                   Background="#34495e"
+                   Foreground="White"
+                   FontSize="15" Click="Button_Click" />
+           
+        </StackPanel>
+        <StackPanel Grid.Column="1" Margin="0">
+         
+            <DataGrid Grid.Column="1" x:Name="dgProduct" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID" Binding="{Binding ProductId}" Width="Auto"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding ProductName}" Width="*"/>
+                    <DataGridTextColumn Header="Barcode" Binding="{Binding Barcode}" Width="*"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="Auto"/>
+                    <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="Auto"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding Category}" Width="*"/>
+                    <!-- Action column with icon buttons -->
+                    <DataGridTemplateColumn Header="Actions" Width="100">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <!-- View Button -->
+                                    <Button Click="ViewProduct_Click"
+                               Margin="2"
+                               ToolTip="View">
+                                        <TextBlock FontFamily="Segoe MDL2 Assets"
+                                      Text="&#xE8EF;"   
+                                      FontSize="16"/>
+
+                                    </Button>
+                                    
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </Window>
