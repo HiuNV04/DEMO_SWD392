@@ -66,7 +66,7 @@ namespace DEMO_SWD392
                 if (roleId != null)
                 {
                     // Nếu đăng nhập thành công và RoleId là Cashier (2), chuyển đến Cashier.xaml
-                    if ((int)roleId == 2)
+                    if ((int)roleId == 2)   
                     {
                         Cashier cashierWindow = new Cashier();
                         cashierWindow.Show();
