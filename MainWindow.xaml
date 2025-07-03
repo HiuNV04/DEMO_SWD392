@@ -12,12 +12,12 @@
             <!-- Sidebar width -->
             <ColumnDefinition Width="*"/>
             <!-- Main content -->
-            
+
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
         <StackPanel Grid.Column="0" Background="#2c3e50" VerticalAlignment="Stretch">
-            
+
             <TextBlock Text="Admin Dashboard" 
                        Foreground="White" 
                        FontSize="20" 
@@ -29,7 +29,8 @@
                     Background="#34495e"
                     Foreground="White"
                     FontSize="15" Click="ManageAccount_Click"/>
-            <Button Content="Product Managemen"
+           
+            <Button Content="Manage Product"
                     Margin="16,0,16,12"
                     Height="40"
                     Background="#34495e"
@@ -39,7 +40,7 @@
 
         <!-- Nội dung động -->
         <ContentControl x:Name="MainContentArea" Grid.Column="1" />
-        
+
         <StackPanel Grid.Column="1" Margin="10">
             <!-- Hàng chứa nút Add + Search -->
             <StackPanel Orientation="Horizontal" Margin="0,10,0,10" HorizontalAlignment="Left">

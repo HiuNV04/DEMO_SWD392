@@ -130,34 +130,9 @@ namespace DEMO_SWD392
 
         private void ManageAccount_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                dgProduct.Visibility = Visibility.Collapsed;
-
-                var users = _context.Users
-                    .Include(u => u.Role)
-                    .Select(u => new
-                    {
-                        u.UserId,
-                        u.Username,
-                        u.AccountFullName,
-                        Role = u.Role != null ? u.Role.RoleName : "Unknown",
-                        Status = "Active" 
-                    })
-                    .ToList();
-
-                if (users.Count == 0)
-                {
-                    MessageBox.Show("No user accounts found.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                }
-
-                dgAccountList.ItemsSource = users;
-                dgAccountList.Visibility = Visibility.Visible;
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Unable to load user list. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            ManageAccount manageAccountWindow = new ManageAccount();
+            manageAccountWindow.Show();
+            this.Close();
         }
     }
 }
