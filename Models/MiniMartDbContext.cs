@@ -74,54 +74,9 @@ public partial class MiniMartDbContext : DbContext
         });
 
         //1
-        //modelBuilder.Entity<Cart>(entity =>
-        //{
-        //    entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B85935D8E5");
-
-        //    entity.ToTable("Cart");
-
-        //    entity.Property(e => e.CartId).HasColumnName("cartId");
-        //    entity.Property(e => e.CreatedDate)
-        //        .HasColumnType("datetime")
-        //        .HasColumnName("createdDate");
-        //    entity.Property(e => e.Status)
-        //        .HasMaxLength(50)
-        //        .HasColumnName("status");
-        //    entity.Property(e => e.UserId).HasColumnName("userId");
-
-        //    entity.HasOne(d => d.User).WithMany(p => p.Carts)
-        //        .HasForeignKey(d => d.UserId)
-        //        .HasConstraintName("FK__Cart__userId__628FA481");
-        //});
-
-        //modelBuilder.Entity<CartItem>(entity =>
-        //{
-        //    entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B68665801B");
-
-        //    entity.ToTable("CartItem");
-
-        //    entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
-        //    entity.Property(e => e.CartId).HasColumnName("cartId");
-        //    entity.Property(e => e.ProductId).HasColumnName("productId");
-        //    entity.Property(e => e.Quantity).HasColumnName("quantity");
-        //    entity.Property(e => e.UnitPrice)
-        //        .HasColumnType("decimal(18, 2)")
-        //        .HasColumnName("unitPrice");
-
-        //    entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
-        //        .HasForeignKey(d => d.CartId)
-        //        .HasConstraintName("FK__CartItem__cartId__656C112C");
-
-        //    entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
-        //        .HasForeignKey(d => d.ProductId)
-        //        .HasConstraintName("FK__CartItem__produc__66603565");
-        //});
-        ///
-
-
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B8A8CCF9E2");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B85935D8E5");
 
             entity.ToTable("Cart");
 
@@ -136,12 +91,12 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Cart__userId__5070F446");
+                .HasConstraintName("FK__Cart__userId__628FA481");
         });
 
         modelBuilder.Entity<CartItem>(entity =>
         {
-            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B64804F5E7");
+            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B68665801B");
 
             entity.ToTable("CartItem");
 
@@ -155,12 +110,57 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
                 .HasForeignKey(d => d.CartId)
-                .HasConstraintName("FK__CartItem__cartId__534D60F1");
+                .HasConstraintName("FK__CartItem__cartId__656C112C");
 
             entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__CartItem__produc__5441852A");
+                .HasConstraintName("FK__CartItem__produc__66603565");
         });
+        ///
+
+
+        //modelBuilder.Entity<Cart>(entity =>
+        //{
+        //    entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B8A8CCF9E2");
+
+        //    entity.ToTable("Cart");
+
+        //    entity.Property(e => e.CartId).HasColumnName("cartId");
+        //    entity.Property(e => e.CreatedDate)
+        //        .HasColumnType("datetime")
+        //        .HasColumnName("createdDate");
+        //    entity.Property(e => e.Status)
+        //        .HasMaxLength(50)
+        //        .HasColumnName("status");
+        //    entity.Property(e => e.UserId).HasColumnName("userId");
+
+        //    entity.HasOne(d => d.User).WithMany(p => p.Carts)
+        //        .HasForeignKey(d => d.UserId)
+        //        .HasConstraintName("FK__Cart__userId__5070F446");
+        //});
+
+        //modelBuilder.Entity<CartItem>(entity =>
+        //{
+        //    entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B64804F5E7");
+
+        //    entity.ToTable("CartItem");
+
+        //    entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
+        //    entity.Property(e => e.CartId).HasColumnName("cartId");
+        //    entity.Property(e => e.ProductId).HasColumnName("productId");
+        //    entity.Property(e => e.Quantity).HasColumnName("quantity");
+        //    entity.Property(e => e.UnitPrice)
+        //        .HasColumnType("decimal(18, 2)")
+        //        .HasColumnName("unitPrice");
+
+        //    entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
+        //        .HasForeignKey(d => d.CartId)
+        //        .HasConstraintName("FK__CartItem__cartId__534D60F1");
+
+        //    entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+        //        .HasForeignKey(d => d.ProductId)
+        //        .HasConstraintName("FK__CartItem__produc__5441852A");
+        //});
 
         modelBuilder.Entity<Category>(entity =>
         {

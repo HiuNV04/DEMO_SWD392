@@ -20,10 +20,12 @@ namespace DEMO_SWD392
     /// </summary>
     public partial class Cashier : Window
     {
+        private int userId; // Giả sử userId được truyền từ MainWindow hoặc Login
         private MiniMartDbContext _context = new MiniMartDbContext();
 
-        public Cashier()
+        public Cashier(int userId)
         {
+            this.userId = userId; // Lưu userId để sử dụng sau này
             InitializeComponent();
             LoadProducts();
         }
@@ -72,9 +74,11 @@ namespace DEMO_SWD392
 
         private void Button_ProcessSale(object sender, RoutedEventArgs e)
         {
+
             try
             {
-                var processSaleWindow = new CashierProcessSale();
+                var processSaleWindow = new CashierProcessSale(userId);
+                MessageBox.Show($"Chào mừng userId={userId}  đến với cửa sổ thanh toán!");
                 processSaleWindow.Show();
             }
             catch (Exception ex)

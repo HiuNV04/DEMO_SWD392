@@ -21,6 +21,7 @@ namespace DEMO_SWD392
     /// </summary>
     public class CartDisplayItem : INotifyPropertyChanged
     {
+        
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         private int quantity;
@@ -41,16 +42,17 @@ namespace DEMO_SWD392
         private Cart currentCart;
         private List<CartDisplayItem> cartDisplayItems = new List<CartDisplayItem>();
         private List<CartItem> cartItems = new List<CartItem>();
-        private int currentUserId = 1; // TODO: Lấy userId thực tế khi đăng nhập
+        private int currentUserId; // TODO: Lấy userId thực tế khi đăng nhập
         private decimal discountPercent = 0;
         private string lastInvoiceFile = null;
         private List<Product> allProducts;
 
-        public CashierProcessSale()
+        public CashierProcessSale(int userId)
         {
             InitializeComponent();
             allProducts = db.Products.ToList();
             StartNewCart();
+            this.currentUserId = userId;
             UpdateCartDisplay();
             cbProductInput.ItemsSource = allProducts.Select(p => p.ProductName + " (" + p.Barcode + ")").ToList();
         }
@@ -64,7 +66,17 @@ namespace DEMO_SWD392
                 Status = "Active"
             };
             db.Carts.Add(currentCart);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
+                    (ex.InnerException != null ? ex.InnerException.Message : "") +
+                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
+            }
+
             cartItems.Clear();
             cartDisplayItems.Clear();
             discountPercent = 0;
@@ -197,7 +209,17 @@ namespace DEMO_SWD392
                 DiscountCode = discount?.DiscountCode1
             };
             db.Invoices.Add(invoice);
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
+                    (ex.InnerException != null ? ex.InnerException.Message : "") +
+                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
+            }
+
             // Thêm chi tiết hóa đơn và trừ tồn kho
             foreach (var item in cartDisplayItems)
             {
@@ -220,7 +242,17 @@ namespace DEMO_SWD392
             {
                 dbCart.Status = "CheckedOut";
             }
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
+                    (ex.InnerException != null ? ex.InnerException.Message : "") +
+                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
+            }
+
             MessageBox.Show("Thanh toán thành công!");
             PrintInvoice(invoice.InvoiceId);
             StartNewCart();
@@ -233,7 +265,17 @@ namespace DEMO_SWD392
             if (dbCart != null && dbCart.Status == "Active")
             {
                 dbCart.Status = "Cancelled";
-                db.SaveChanges();
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
+                        (ex.InnerException != null ? ex.InnerException.Message : "") +
+                        (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
+                }
+
             }
             cartDisplayItems.Clear();
             UpdateCartDisplay();

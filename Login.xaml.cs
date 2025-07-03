@@ -68,9 +68,32 @@ namespace DEMO_SWD392
                     // Nếu đăng nhập thành công và RoleId là Cashier (2), chuyển đến Cashier.xaml
                     if ((int)roleId == 2)   
                     {
-                        Cashier cashierWindow = new Cashier();
-                        cashierWindow.Show();
-                        this.Close();
+                        // Lấy UserId từ cơ sở dữ liệu để truyền vào Cashier
+                        try
+                        {
+                            string userIdQuery = "SELECT UserId FROM Users WHERE Username = @Username AND Password = @Password";
+                            SqlCommand userIdCommand = new SqlCommand(userIdQuery, connection);
+                            userIdCommand.Parameters.AddWithValue("@Username", UsernameTextBox.Text);
+                            userIdCommand.Parameters.AddWithValue("@Password", PasswordBox.Password);
+                            object userIdObj = userIdCommand.ExecuteScalar();
+                            if (userIdObj == null)
+                            {
+                                MessageBox.Show("Tài khoản không tồn tại hoặc sai mật khẩu.");
+                                return;
+                            }
+                            int userId = (int)userIdObj;
+                            MessageBox.Show($"Đăng nhập thành công voi userId = {userId}!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                            Cashier cashierWindow = new Cashier(userId);
+                            cashierWindow.Show();
+                            this.Close();
+                        }
+                        catch(Exception ex)
+                        {
+                            MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                         
                     }
                     else
                     {
