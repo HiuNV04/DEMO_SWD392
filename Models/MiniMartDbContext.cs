@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+using System.IO;
 
 namespace DEMO_SWD392.Models;
 
@@ -38,9 +40,14 @@ public partial class MiniMartDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("server = LAPTOP-KMHGGFJ6\\MAY1; database = MiniMartDB;uid=sa;pwd=sa;TrustServerCertificate=True;");
+    {
+        var builder = new ConfigurationBuilder()
+                       .SetBasePath(Directory.GetCurrentDirectory())
+                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        IConfigurationRoot configuration = builder.Build();
+        optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
 
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BackupLog>(entity =>
@@ -66,48 +73,51 @@ public partial class MiniMartDbContext : DbContext
                 .HasConstraintName("FK__BackupLog__userI__5FB337D6");
         });
 
-        modelBuilder.Entity<Cart>(entity =>
-        {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B85935D8E5");
+        //1
+        //modelBuilder.Entity<Cart>(entity =>
+        //{
+        //    entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B85935D8E5");
 
-            entity.ToTable("Cart");
+        //    entity.ToTable("Cart");
 
-            entity.Property(e => e.CartId).HasColumnName("cartId");
-            entity.Property(e => e.CreatedDate)
-                .HasColumnType("datetime")
-                .HasColumnName("createdDate");
-            entity.Property(e => e.Status)
-                .HasMaxLength(50)
-                .HasColumnName("status");
-            entity.Property(e => e.UserId).HasColumnName("userId");
+        //    entity.Property(e => e.CartId).HasColumnName("cartId");
+        //    entity.Property(e => e.CreatedDate)
+        //        .HasColumnType("datetime")
+        //        .HasColumnName("createdDate");
+        //    entity.Property(e => e.Status)
+        //        .HasMaxLength(50)
+        //        .HasColumnName("status");
+        //    entity.Property(e => e.UserId).HasColumnName("userId");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Carts)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Cart__userId__628FA481");
-        });
+        //    entity.HasOne(d => d.User).WithMany(p => p.Carts)
+        //        .HasForeignKey(d => d.UserId)
+        //        .HasConstraintName("FK__Cart__userId__628FA481");
+        //});
 
-        modelBuilder.Entity<CartItem>(entity =>
-        {
-            entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B68665801B");
+        //modelBuilder.Entity<CartItem>(entity =>
+        //{
+        //    entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B68665801B");
 
-            entity.ToTable("CartItem");
+        //    entity.ToTable("CartItem");
 
-            entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
-            entity.Property(e => e.CartId).HasColumnName("cartId");
-            entity.Property(e => e.ProductId).HasColumnName("productId");
-            entity.Property(e => e.Quantity).HasColumnName("quantity");
-            entity.Property(e => e.UnitPrice)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("unitPrice");
+        //    entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
+        //    entity.Property(e => e.CartId).HasColumnName("cartId");
+        //    entity.Property(e => e.ProductId).HasColumnName("productId");
+        //    entity.Property(e => e.Quantity).HasColumnName("quantity");
+        //    entity.Property(e => e.UnitPrice)
+        //        .HasColumnType("decimal(18, 2)")
+        //        .HasColumnName("unitPrice");
 
-            entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
-                .HasForeignKey(d => d.CartId)
-                .HasConstraintName("FK__CartItem__cartId__656C112C");
+        //    entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
+        //        .HasForeignKey(d => d.CartId)
+        //        .HasConstraintName("FK__CartItem__cartId__656C112C");
 
-            entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__CartItem__produc__66603565");
-        });
+        //    entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
+        //        .HasForeignKey(d => d.ProductId)
+        //        .HasConstraintName("FK__CartItem__produc__66603565");
+        //});
+        ///
+
 
         modelBuilder.Entity<Cart>(entity =>
         {
