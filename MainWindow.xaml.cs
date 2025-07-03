@@ -45,7 +45,7 @@ namespace DEMO_SWD392
         {
 
 
-            LoadProducts();
+            //LoadProducts();
         }
         private void ViewProduct_Click(object sender, RoutedEventArgs e)
         {
@@ -53,7 +53,7 @@ namespace DEMO_SWD392
             var selectedProduct = (button.DataContext as dynamic);
             int productId = selectedProduct.ProductId;
 
-            var detailWindow = new ViewDetailWindow( productId);
+            var detailWindow = new ViewDetailWindow(productId);
             detailWindow.ShowDialog();
 
             // Nếu có thay đổi, load lại data

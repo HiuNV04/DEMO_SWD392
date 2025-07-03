@@ -62,9 +62,9 @@ namespace DEMO_SWD392
 
 
         }
-        
 
-       
+
+
 
         private void Button_ViewProduct(object sender, RoutedEventArgs e)
         {

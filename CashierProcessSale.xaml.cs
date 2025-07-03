@@ -1,6 +1,8 @@
 ﻿using DEMO_SWD392.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +14,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.ComponentModel;
 
 namespace DEMO_SWD392
 {
@@ -21,7 +22,7 @@ namespace DEMO_SWD392
     /// </summary>
     public class CartDisplayItem : INotifyPropertyChanged
     {
-        
+
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         private int quantity;
@@ -42,7 +43,7 @@ namespace DEMO_SWD392
         private Cart currentCart;
         private List<CartDisplayItem> cartDisplayItems = new List<CartDisplayItem>();
         private List<CartItem> cartItems = new List<CartItem>();
-        private int currentUserId; // TODO: Lấy userId thực tế khi đăng nhập
+        private int currentUserId; 
         private decimal discountPercent = 0;
         private string lastInvoiceFile = null;
         private List<Product> allProducts;
@@ -50,10 +51,11 @@ namespace DEMO_SWD392
         public CashierProcessSale(int userId)
         {
             InitializeComponent();
+            this.currentUserId = userId;
+
             allProducts = db.Products.ToList();
             StartNewCart();
-            this.currentUserId = userId;
-            UpdateCartDisplay();
+             UpdateCartDisplay();
             cbProductInput.ItemsSource = allProducts.Select(p => p.ProductName + " (" + p.Barcode + ")").ToList();
         }
 
@@ -65,18 +67,10 @@ namespace DEMO_SWD392
                 CreatedDate = DateTime.Now,
                 Status = "Active"
             };
-            db.Carts.Add(currentCart);
-            try
-            {
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
-                    (ex.InnerException != null ? ex.InnerException.Message : "") +
-                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
-            }
+            MessageBox.Show("UserId truyền vào Cart: " + currentUserId);
 
+            db.Carts.Add(currentCart);
+                db.SaveChanges();
             cartItems.Clear();
             cartDisplayItems.Clear();
             discountPercent = 0;
@@ -209,16 +203,11 @@ namespace DEMO_SWD392
                 DiscountCode = discount?.DiscountCode1
             };
             db.Invoices.Add(invoice);
-            try
-            {
+           
+             
                 db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
-                    (ex.InnerException != null ? ex.InnerException.Message : "") +
-                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
-            }
+            
+           
 
             // Thêm chi tiết hóa đơn và trừ tồn kho
             foreach (var item in cartDisplayItems)
@@ -242,22 +231,15 @@ namespace DEMO_SWD392
             {
                 dbCart.Status = "CheckedOut";
             }
-            try
-            {
+          
                 db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
-                    (ex.InnerException != null ? ex.InnerException.Message : "") +
-                    (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
-            }
+           
+          
 
             MessageBox.Show("Thanh toán thành công!");
             PrintInvoice(invoice.InvoiceId);
             StartNewCart();
         }
-
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             // Hủy giỏ hàng
@@ -265,16 +247,10 @@ namespace DEMO_SWD392
             if (dbCart != null && dbCart.Status == "Active")
             {
                 dbCart.Status = "Cancelled";
-                try
-                {
+               
                     db.SaveChanges();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message + "\n\n" +
-                        (ex.InnerException != null ? ex.InnerException.Message : "") +
-                        (ex.InnerException?.InnerException != null ? "\n" + ex.InnerException.InnerException.Message : ""));
-                }
+                
+               
 
             }
             cartDisplayItems.Clear();

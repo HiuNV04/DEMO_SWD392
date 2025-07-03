@@ -1,8 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using Microsoft.EntityFrameworkCore;
 
 namespace DEMO_SWD392.Models;
 
@@ -40,14 +38,9 @@ public partial class MiniMartDbContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        var builder = new ConfigurationBuilder()
-                       .SetBasePath(Directory.GetCurrentDirectory())
-                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        IConfigurationRoot configuration = builder.Build();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString("MyCnn"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("server = LAPTOP-KMHGGFJ6\\MAY1; database = MiniMartDB;uid=sa;pwd=sa;TrustServerCertificate=True;");
 
-    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BackupLog>(entity =>
@@ -70,54 +63,8 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.BackupLogs)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__BackupLog__userI__5FB337D6");
+                .HasConstraintName("FK__BackupLog__userI__4D94879B");
         });
-
-        //1
-        //modelBuilder.Entity<Cart>(entity =>
-        //{
-        //    entity.HasKey(e => e.CartId).HasName("PK__Cart__415B03B85935D8E5");
-
-        //    entity.ToTable("Cart");
-
-        //    entity.Property(e => e.CartId).HasColumnName("cartId");
-        //    entity.Property(e => e.CreatedDate)
-        //        .HasColumnType("datetime")
-        //        .HasColumnName("createdDate");
-        //    entity.Property(e => e.Status)
-        //        .HasMaxLength(50)
-        //        .HasColumnName("status");
-        //    entity.Property(e => e.UserId).HasColumnName("userId");
-
-        //    entity.HasOne(d => d.User).WithMany(p => p.Carts)
-        //        .HasForeignKey(d => d.UserId)
-        //        .HasConstraintName("FK__Cart__userId__628FA481");
-        //});
-
-        //modelBuilder.Entity<CartItem>(entity =>
-        //{
-        //    entity.HasKey(e => e.CartItemId).HasName("PK__CartItem__283983B68665801B");
-
-        //    entity.ToTable("CartItem");
-
-        //    entity.Property(e => e.CartItemId).HasColumnName("cartItemId");
-        //    entity.Property(e => e.CartId).HasColumnName("cartId");
-        //    entity.Property(e => e.ProductId).HasColumnName("productId");
-        //    entity.Property(e => e.Quantity).HasColumnName("quantity");
-        //    entity.Property(e => e.UnitPrice)
-        //        .HasColumnType("decimal(18, 2)")
-        //        .HasColumnName("unitPrice");
-
-        //    entity.HasOne(d => d.Cart).WithMany(p => p.CartItems)
-        //        .HasForeignKey(d => d.CartId)
-        //        .HasConstraintName("FK__CartItem__cartId__656C112C");
-
-        //    entity.HasOne(d => d.Product).WithMany(p => p.CartItems)
-        //        .HasForeignKey(d => d.ProductId)
-        //        .HasConstraintName("FK__CartItem__produc__66603565");
-        //});
-        ///
-
 
         modelBuilder.Entity<Cart>(entity =>
         {
@@ -213,11 +160,11 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.DiscountCodeNavigation).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.DiscountCode)
-                .HasConstraintName("FK__Invoice__discoun__5629CD9C");
+                .HasConstraintName("FK__Invoice__discoun__440B1D61");
 
             entity.HasOne(d => d.User).WithMany(p => p.Invoices)
                 .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK__Invoice__userId__5535A963");
+                .HasConstraintName("FK__Invoice__userId__4316F928");
         });
 
         modelBuilder.Entity<InvoiceDetail>(entity =>
@@ -236,11 +183,11 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.Invoice).WithMany(p => p.InvoiceDetails)
                 .HasForeignKey(d => d.InvoiceId)
-                .HasConstraintName("FK__InvoiceDe__invoi__59063A47");
+                .HasConstraintName("FK__InvoiceDe__invoi__46E78A0C");
 
             entity.HasOne(d => d.Product).WithMany(p => p.InvoiceDetails)
                 .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK__InvoiceDe__produ__59FA5E80");
+                .HasConstraintName("FK__InvoiceDe__produ__47DBAE45");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -264,7 +211,7 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
-                .HasConstraintName("FK__Product__categor__4BAC3F29");
+                .HasConstraintName("FK__Product__categor__398D8EEE");
         });
 
         modelBuilder.Entity<Report>(entity =>
@@ -286,7 +233,7 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.Reports)
                 .HasForeignKey(d => d.CreatedBy)
-                .HasConstraintName("FK__Report__createdB__5CD6CB2B");
+                .HasConstraintName("FK__Report__createdB__4AB81AF0");
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -319,7 +266,7 @@ public partial class MiniMartDbContext : DbContext
 
             entity.HasOne(d => d.Role).WithMany(p => p.Users)
                 .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK__Users__roleId__5070F446");
+                .HasConstraintName("FK__Users__roleId__3E52440B");
         });
 
         OnModelCreatingPartial(modelBuilder);

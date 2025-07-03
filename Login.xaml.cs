@@ -66,7 +66,7 @@ namespace DEMO_SWD392
                 if (roleId != null)
                 {
                     // Nếu đăng nhập thành công và RoleId là Cashier (2), chuyển đến Cashier.xaml
-                    if ((int)roleId == 2)   
+                    if ((int)roleId == 2)
                     {
                         // Lấy UserId từ cơ sở dữ liệu để truyền vào Cashier
                         try
@@ -88,12 +88,12 @@ namespace DEMO_SWD392
                             cashierWindow.Show();
                             this.Close();
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                             return;
                         }
-                         
+
                     }
                     else
                     {
@@ -111,6 +111,7 @@ namespace DEMO_SWD392
         }
 
 
-        
+
     }
+    
 }
