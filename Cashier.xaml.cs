@@ -87,5 +87,13 @@ namespace DEMO_SWD392
             }
 
         }
+
+      
+
+        private void Button_EndShiftSummary(object sender, RoutedEventArgs e)
+        {
+            EndShiftSummaryWindow endShiftSummaryWindow = new EndShiftSummaryWindow(userId);
+            endShiftSummaryWindow.ShowDialog();
+        }
     }
 }
