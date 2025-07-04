@@ -130,11 +130,11 @@ namespace DEMO_SWD392
 
         private void ManageAccount_Click(object sender, RoutedEventArgs e)
         {
-<<<<<<< HEAD
+ 
             ManageAccount manageAccountWindow = new ManageAccount();
             manageAccountWindow.Show();
             this.Close();
-=======
+ 
             try
             {
                 dgProduct.Visibility = Visibility.Collapsed;
@@ -164,11 +164,10 @@ namespace DEMO_SWD392
                 MessageBox.Show("Unable to load user list. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        private void ManageAccount_Click(object sender, RoutedEventArgs e)
-        {
-            ManageAccount manageAccountWindow = new ManageAccount();
-            manageAccountWindow.Show();
->>>>>>> f0427ac1ea47cd848cb9699babf4fb424a5f3698
-        }
+        //private void ManageAccount_Click(object sender, RoutedEventArgs e)
+        //{
+        //    ManageAccount manageAccountWindow = new ManageAccount();
+        //    manageAccountWindow.Show();
+        // }
     }
 }
