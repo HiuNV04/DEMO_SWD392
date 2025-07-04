@@ -1,4 +1,5 @@
 ﻿using DEMO_SWD392.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,7 +44,9 @@ namespace DEMO_SWD392
         }
         private void ManageProduct_Click(object sender, RoutedEventArgs e)
         {
+            dgAccountList.Visibility = Visibility.Collapsed;
 
+            dgProduct.Visibility = Visibility.Visible;
 
             //LoadProducts();
         }
@@ -96,10 +99,76 @@ namespace DEMO_SWD392
             }
         }
 
+        private void SearchProduct_Click(object sender, RoutedEventArgs e)
+        {
+            string keyword = txtSearch.Text.Trim().ToLower();
+
+            var products = _context.Products
+                .Where(p =>
+                    (p.ProductName ?? "").ToLower().Contains(keyword) ||
+                    (p.Barcode ?? "").ToLower().Contains(keyword) ||
+                    (p.Category != null && (p.Category.CategoryName ?? "").ToLower().Contains(keyword))
+                )
+                .Select(p => new
+                {
+                    p.ProductId,
+                    p.ProductName,
+                    p.Barcode,
+                    p.Quantity,
+                    p.Price,
+                    Category = p.Category != null ? p.Category.CategoryName : ""
+                })
+                .ToList();
+
+            if (products.Count == 0)
+            {
+                MessageBox.Show("No product matched your search.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            dgProduct.ItemsSource = products;
+        }
+
+        private void ManageAccount_Click(object sender, RoutedEventArgs e)
+        {
+<<<<<<< HEAD
+            ManageAccount manageAccountWindow = new ManageAccount();
+            manageAccountWindow.Show();
+            this.Close();
+=======
+            try
+            {
+                dgProduct.Visibility = Visibility.Collapsed;
+
+                var users = _context.Users
+                    .Include(u => u.Role)
+                    .Select(u => new
+                    {
+                        u.UserId,
+                        u.Username,
+                        u.AccountFullName,
+                        Role = u.Role != null ? u.Role.RoleName : "Unknown",
+                        Status = "Active"
+                    })
+                    .ToList();
+
+                if (users.Count == 0)
+                {
+                    MessageBox.Show("No user accounts found.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+
+                dgAccountList.ItemsSource = users;
+                dgAccountList.Visibility = Visibility.Visible;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Unable to load user list. Please try again later.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
         private void ManageAccount_Click(object sender, RoutedEventArgs e)
         {
             ManageAccount manageAccountWindow = new ManageAccount();
             manageAccountWindow.Show();
+>>>>>>> f0427ac1ea47cd848cb9699babf4fb424a5f3698
         }
     }
 }

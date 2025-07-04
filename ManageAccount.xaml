@@ -8,23 +8,94 @@
         Title="ManageAccount" Height="450" Width="800">
     <Grid>
 
-        <DataGrid x:Name="dgUsers" AutoGenerateColumns="False" Margin="10,119,10,10" SelectionChanged="dgUsers_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="UserId" Binding="{Binding UserId}" Width="Auto"/>
-                <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
-                <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="*"/>
-                <DataGridTextColumn Header="Role" Binding="{Binding RoleId}" Width="*"/>
-                <!-- Add more columns as needed -->
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button Content="Search" HorizontalAlignment="Left" Margin="658,29,0,0" VerticalAlignment="Top" Width="75" Click="SearchButton_Click"/>
-        <TextBox x:Name="SearchTextBox" HorizontalAlignment="Left" Margin="519,29,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <!-- Sidebar trái -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="180"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <TextBox x:Name="username" HorizontalAlignment="Left" Margin="111,15,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="pass" HorizontalAlignment="Left" Margin="111,84,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="120"/>
+        <StackPanel Grid.Column="0" Background="#2c3e50">
+            <TextBlock Text="Admin Dashboard"
+                       Foreground="White"
+                       FontSize="20"
+                       FontWeight="Bold"
+                       Margin="16,20,0,32" />
 
-        <Label Content="username" HorizontalAlignment="Left" Margin="28,11,0,0" VerticalAlignment="Top"/>
-        <Label Content="pass" HorizontalAlignment="Left" Margin="28,76,0,0" VerticalAlignment="Top"/>
-        <Button Content="Add Account" HorizontalAlignment="Left" Margin="257,50,0,0" VerticalAlignment="Top" Click="AddAccount_Click"/>
+            <Button Content="Manage Product"
+                    Margin="16,0,16,12"
+                    Height="40"
+                    Background="#34495e"
+                    Foreground="White"
+                    FontSize="15"
+                    Click="ManageProduct_Click"/>
+
+            <Button Content="Account Management"
+                    Margin="16,0,16,12"
+                    Height="40"
+                    Background="#2980b9"
+                    Foreground="White"
+                    FontSize="15"/>
+        </StackPanel>
+
+        <!-- Nội dung phải -->
+        <Grid Grid.Column="1" Margin="10">
+
+            <!-- Ô nhập thêm tài khoản -->
+            <Label Content="Username:" Margin="10,10,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="username" Width="150" Margin="74,14,376,0" VerticalAlignment="Top"/>
+
+            <Label Content="Password:" Margin="10,50,0,0" VerticalAlignment="Top"/>
+            <TextBox x:Name="pass" Width="150" Margin="74,54,376,0" VerticalAlignment="Top"/>
+
+            <Button Content="Add Account"
+                    Width="120"
+                    Height="30"
+                    Margin="240,14,240,0"
+                    VerticalAlignment="Top"
+                    Click="AddAccount_Click"/>
+
+            <!-- Tìm kiếm -->
+            <TextBox x:Name="SearchTextBox" Width="150" Margin="365,14,85,0" VerticalAlignment="Top"/>
+            <Button Content="Search"
+                    Width="75"
+                    Margin="525,12,0,0"
+                    VerticalAlignment="Top"
+                    Click="SearchButton_Click"/>
+
+            <!-- Bảng tài khoản -->
+            <DataGrid x:Name="dgUsers"
+          AutoGenerateColumns="False"
+          Margin="0,120,0,0">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="UserId" Binding="{Binding UserId}" Width="Auto"/>
+                    <DataGridTextColumn Header="Username" Binding="{Binding Username}" Width="*"/>
+                    <DataGridTextColumn Header="Password" Binding="{Binding Password}" Width="*"/>
+                    <DataGridTextColumn Header="Role" Binding="{Binding RoleId}" Width="*"/>
+
+                    <!-- Actions column -->
+                    <DataGridTemplateColumn Header="Actions" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <!-- View button -->
+                                    <Button Content="View"
+                        Margin="2"
+                        Padding="5,0"
+                        Click="ViewUserById_Click"
+                        CommandParameter="{Binding UserId}" />
+
+                                    <!-- Delete button -->
+                                    <Button Content="Delete"
+                        Margin="2"
+                        Padding="5,0"
+                        Click="DeleteUserById_Click"
+                        CommandParameter="{Binding UserId}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
     </Grid>
 </Window>

@@ -69,7 +69,6 @@ namespace DEMO_SWD392
             string usernameInput = username.Text.Trim();
             string passwordInput = pass.Text.Trim();
 
-            // Kiểm tra nếu tài khoản đã tồn tại trong cơ sở dữ liệu
             var existingUser = _context.Users.FirstOrDefault(u => u.Username == usernameInput);
 
             if (existingUser != null)
@@ -79,13 +78,19 @@ namespace DEMO_SWD392
             }
             else
             {
-                // Nếu tài khoản chưa tồn tại, thêm tài khoản mới vào cơ sở dữ liệu
+                var cashierRole = _context.Roles.FirstOrDefault(r => r.RoleName == "Cashier");
+                if (cashierRole == null)
+                {
+                    MessageBox.Show("Cashier role does not exist in the database.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
                 var newUser = new User
                 {
                     Username = usernameInput,
-                    Password = passwordInput,  // Bạn có thể mã hóa mật khẩu trước khi lưu nếu cần
-                    AccountFullName = "New User",  // Bạn có thể yêu cầu người dùng nhập tên đầy đủ nếu cần
-                    RoleId = 2  // Ví dụ, gán RoleId = 2 cho "Cashier"
+                    Password = passwordInput,
+                    AccountFullName = "New User",
+                    RoleId = cashierRole.RoleId
                 };
 
                 _context.Users.Add(newUser);
@@ -98,17 +103,60 @@ namespace DEMO_SWD392
             }
         }
 
-        private void dgUsers_SelectionChanged(object sender, RoutedEventArgs e)
+        private void ViewUserById_Click(object sender, RoutedEventArgs e)
         {
-            // Get the selected user from DataGrid
-            var selectedUser = dgUsers.SelectedItem as dynamic;
-
-            if (selectedUser != null)
+            if (sender is Button button && button.CommandParameter is int userId)
             {
-                // Populate the TextBoxes with the user's information
-                username.Text = selectedUser.Username;
-                pass.Text = selectedUser.Password;
+                var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+                if (user != null)
+                {
+                    var detailWindow = new UserDetailWindow(user);
+                    detailWindow.ShowDialog();
+
+                    if (detailWindow.IsSaved)
+                    {
+                        LoadUsers();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("User not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             }
+        }
+        private void DeleteUserById_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button && button.CommandParameter is int userId)
+            {
+                var user = _context.Users.FirstOrDefault(u => u.UserId == userId);
+                if (user != null)
+                {
+                    var result = MessageBox.Show(
+                        $"Are you sure you want to delete user '{user.Username}'?",
+                        "Confirm Delete",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Warning);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        _context.Users.Remove(user);
+                        _context.SaveChanges();
+                        MessageBox.Show("User deleted successfully.", "Deleted", MessageBoxButton.OK, MessageBoxImage.Information);
+                        LoadUsers();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("User not found.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private void ManageProduct_Click(object sender, RoutedEventArgs e)
+        {
+            var mainWindow = new MainWindow();
+            mainWindow.Show();
+            this.Close();
         }
     }
 }
